@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { arrayProp, modelOptions, prop, Ref } from '@typegoose/typegoose';
-import { Episode } from './episode.model';
+import { modelOptions, prop, Ref } from '@typegoose/typegoose';
 
 @modelOptions({
     schemaOptions: {
@@ -15,7 +14,4 @@ export class Course {
     @ApiProperty({description: '封面图'})    // api文档
     @prop() // 数据库字段
     cover: string
-
-    @arrayProp({itemsRef: 'Episode'})
-    episodes: Ref<Episode>[]
 }

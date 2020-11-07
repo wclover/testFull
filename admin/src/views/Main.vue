@@ -12,10 +12,10 @@
     </el-aside>
     <el-container>
       <el-header>
-        全站之巅 - 后台管理界面
+        <h3>全站之巅 - 后台管理界面</h3>
       </el-header>
       <el-main>
-        <router-view></router-view>
+        <router-view :key="$route.path"></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -37,13 +37,13 @@ export default class Main extends Vue {
         items: [
           { title: '首页', path: '/' },
           { title: '课程管理', path: '/courses/list' },
-          { title: '课时管理', path: '/courses/list' }
+          { title: '课时管理', path: '/episodes/list' }
         ]
       },
       {
         title: '运营管理',
         items: [
-          { title: '用户管理', path: '/user/list' }
+          { title: '用户管理', path: '/users/list' }
         ]
       }
     ]

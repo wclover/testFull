@@ -1,35 +1,51 @@
 <template>
   <div>
-      <h3>课程列表</h3>
-      <el-table :data="data.data" border stripe>
-        <el-table-column v-for="(field, name) in fields" :key="name" :prop="name" :label="field.label">
-
-        </el-table-column>
-      </el-table>
+      <h3>{{isNew ? '创建' : '编辑'}}课程</h3>
+      <ele-form
+        :form-data="data"
+        :form-desc="fields"
+        :request-fn="submit"
+      >
+      </ele-form>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
   components: {}
 })
-export default class CourseList extends Vue {
-  data = {}
+export default class CourseEdit extends Vue {
+  @Prop(String) id!: string
+  data = {};
+
   fields = {
-    _id: {label: 'ID'},
-    name: {label: '课程名称'},
-    cover: {label: '课程封面图'}
+    name: {label: '课程名称', type: 'input'},
+    cover: {label: '课程封面图', type: 'input'}
+  }
+
+  get isNew() {
+    return !this.id;
+  }
+
+  async submit(data) {
+    // 数据绑定用v-model ？
+    const url = this.isNew ? 'courses' : `courses/${this.id}`;
+    const method = this.isNew ? 'post' : 'put';
+    await this.$http[method](url, data);
+    this.$message.success('保存成功');
+    this.data = {};
+    this.$router.go(-1);
   }
 
   async fetch() {
-    const res = await this.$http.get('courses')
+    const res = await this.$http.get(`courses/${this.id}`)
     this.data = res.data
   }
 
   created() {
-    this.fetch();
+    !this.isNew && this.fetch();
   }
 }
 </script>
