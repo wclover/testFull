@@ -6,11 +6,27 @@ import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
 import { EpisodesModule } from './episodes/episodes.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { CommonModule } from 'libs/common/src';
 
 const MAO = require('multer');
 
 @Module({
   imports: [
+    CommonModule,
+    MulterModule.registerAsync({
+      useFactory() {
+        return {
+          storage: MAO({  // 阿里云oss
+            config: {
+              region: 'oss-cn-hangzhou',
+              accessKeyId: '<acessKeyId>',
+              accessKeySecret: '<accessKeySecret>',
+              bucket: 'topfullstack'
+            }
+          })
+        }
+      }
+    }),
     MulterModule.register({
       dest: 'uploads' // 本地
       // storage: MAO({  // 阿里云oss
@@ -22,7 +38,7 @@ const MAO = require('multer');
       //   }
       // })
     }),
-    DbModule,
+    // DbModule,
     UsersModule,
     CoursesModule,
     EpisodesModule
